@@ -19,8 +19,8 @@ services:
 
   api:
     build:
-      context: ./TrainingLog
-      dockerfile: TrainingLog.Api/Dockerfile
+      context: ./traininglog-api
+      dockerfile: Dockerfile
     container_name: traininglog-api
     ports:
       - "8080:8080"
