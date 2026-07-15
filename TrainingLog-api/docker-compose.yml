@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "YourSA@Password123"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourSA@Password123" -Q "SELECT 1" -No -C
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  traininglog-api:
+    build: .
+    depends_on:
+      sql-server:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sql-server;Database=TrainLogDb;User Id=sa;Password=YourSA@Password123;TrustServerCertificate=True;MultipleActiveResultSets=true"
+      Jwt__Key: "your-secret-key-at-least-32-characters-long-here"
+      Jwt__Issuer: "TrainLogApi"
+      Jwt__Audience: "TrainLogClient"
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Production"

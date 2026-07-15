@@ -1,0 +1,249 @@
+@TrainLog.Api_HostAddress = https://localhost:7273
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NmZiMTAxNi02OWNhLTQwMWMtOWJiNC03OTU3YTM2ZTBkOWIiLCJlbWFpbCI6InRyYXZpc0B0ZXN0LmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNjZmYjEwMTYtNjljYS00MDFjLTliYjQtNzk1N2EzNmUwZDliIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3ODM4MjQ3MTIsImlzcyI6IlRyYWluTG9nQXBpIiwiYXVkIjoiVHJhaW5Mb2dDbGllbnQifQ.SZMpETxuRjU1lqIzgPwUwDTrZHsPxSFcSeGAaWkWT34
+### =========================
+### AUTH
+### =========================
+
+### Register a new user
+POST {{TrainLog.Api_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "travis@test.com",
+  "password": "Password123!",
+  "firstName": "Travis",
+  "lastName": "Test"
+}
+
+### Login (copy the returned token into @token above)
+POST {{TrainLog.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "travis@test.com",
+  "password": "Password123!"
+}
+
+### =========================
+### TRAINING PLANS
+### =========================
+
+### Get all training plans
+GET {{TrainLog.Api_HostAddress}}/api/trainingplans
+Authorization: Bearer {{token}}
+
+### Get training plan by id
+GET {{TrainLog.Api_HostAddress}}/api/trainingplans/1
+Authorization: Bearer {{token}}
+
+### Create a training plan
+POST {{TrainLog.Api_HostAddress}}/api/trainingplans
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Half Marathon Prep",
+  "startDate": "2026-08-01",
+  "durationWeeks": 32
+}
+
+### Update a training plan
+PUT {{TrainLog.Api_HostAddress}}/api/trainingplans/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Half Marathon Prep - Updated",
+  "startDate": "2026-08-01",
+  "durationWeeks": 30
+}
+
+### Delete a training plan
+DELETE {{TrainLog.Api_HostAddress}}/api/trainingplans/1
+Authorization: Bearer {{token}}
+
+### =========================
+### WORKOUTS
+### =========================
+
+### Get all workouts (current user)
+GET {{TrainLog.Api_HostAddress}}/api/workouts
+Authorization: Bearer {{token}}
+
+### Get workouts filtered by training plan
+GET {{TrainLog.Api_HostAddress}}/api/workouts?trainingPlanId=1
+Authorization: Bearer {{token}}
+
+### Get workout by id
+GET {{TrainLog.Api_HostAddress}}/api/workouts/1
+Authorization: Bearer {{token}}
+
+### Create a workout
+POST {{TrainLog.Api_HostAddress}}/api/workouts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "date": "2026-07-14",
+  "type": 0,
+  "plannedDistanceMiles": 3.0,
+  "actualDistanceMiles": 3.1,
+  "plannedPace": "00:09:30",
+  "actualPace": "00:09:15",
+  "duration": "00:28:45",
+  "notes": "Easy morning run",
+  "completed": true,
+  "trainingPlanId": 1,
+  "shoeId": null
+}
+
+### Update a workout
+PUT {{TrainLog.Api_HostAddress}}/api/workouts/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "date": "2026-07-14",
+  "type": 0,
+  "plannedDistanceMiles": 3.0,
+  "actualDistanceMiles": 3.2,
+  "plannedPace": "00:09:30",
+  "actualPace": "00:09:10",
+  "duration": "00:29:00",
+  "notes": "Felt strong, picked up pace",
+  "completed": true,
+  "trainingPlanId": 1,
+  "shoeId": null
+}
+
+### Delete a workout
+DELETE {{TrainLog.Api_HostAddress}}/api/workouts/1
+Authorization: Bearer {{token}}
+
+### =========================
+### RACES
+### =========================
+
+### Get all races (current user)
+GET {{TrainLog.Api_HostAddress}}/api/races
+Authorization: Bearer {{token}}
+
+### Get races filtered by training plan
+GET {{TrainLog.Api_HostAddress}}/api/races?trainingPlanId=1
+Authorization: Bearer {{token}}
+
+### Get race by id
+GET {{TrainLog.Api_HostAddress}}/api/races/1
+Authorization: Bearer {{token}}
+
+### Create a race
+POST {{TrainLog.Api_HostAddress}}/api/races
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Aiken Half Marathon",
+  "raceDate": "2027-02-15",
+  "distanceMiles": 13.1,
+  "targetTime": "01:55:00",
+  "trainingPlanId": 1
+}
+
+### Update a race
+PUT {{TrainLog.Api_HostAddress}}/api/races/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Aiken Half Marathon",
+  "raceDate": "2027-02-15",
+  "distanceMiles": 13.1,
+  "targetTime": "01:50:00",
+  "trainingPlanId": 1
+}
+
+### Delete a race
+DELETE {{TrainLog.Api_HostAddress}}/api/races/1
+Authorization: Bearer {{token}}
+
+### =========================
+### SHOES
+### =========================
+
+### Get all shoes (current user)
+GET {{TrainLog.Api_HostAddress}}/api/shoes
+Authorization: Bearer {{token}}
+
+### Get shoe by id
+GET {{TrainLog.Api_HostAddress}}/api/shoes/1
+Authorization: Bearer {{token}}
+
+### Create a shoe
+POST {{TrainLog.Api_HostAddress}}/api/shoes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Brooks Ghost 16",
+  "dateAcquired": "2026-06-01",
+  "retired": false
+}
+
+### Update a shoe
+PUT {{TrainLog.Api_HostAddress}}/api/shoes/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Brooks Ghost 16",
+  "dateAcquired": "2026-06-01",
+  "retired": true
+}
+
+### Delete a shoe
+DELETE {{TrainLog.Api_HostAddress}}/api/shoes/1
+Authorization: Bearer {{token}}
+
+### =========================
+### DASHBOARD
+### =========================
+
+### Get dashboard summary
+GET {{TrainLog.Api_HostAddress}}/api/dashboard
+Authorization: Bearer {{token}}
+
+### =========================
+### ADMIN (requires Admin role on the token)
+### =========================
+
+### Get all users
+GET {{TrainLog.Api_HostAddress}}/api/admin/users
+Authorization: Bearer {{token}}
+
+### Get user by id
+GET {{TrainLog.Api_HostAddress}}/api/admin/users/REPLACE_WITH_USER_ID
+Authorization: Bearer {{token}}
+
+### Update a user
+PUT {{TrainLog.Api_HostAddress}}/api/admin/users/REPLACE_WITH_USER_ID
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "isActive": true
+}
+
+### Update a user's roles
+PUT {{TrainLog.Api_HostAddress}}/api/admin/users/REPLACE_WITH_USER_ID/roles
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "roles": ["User", "Admin"]
+}
+
+### Delete a user
+DELETE {{TrainLog.Api_HostAddress}}/api/admin/users/REPLACE_WITH_USER_ID
+Authorization: Bearer {{token}}
