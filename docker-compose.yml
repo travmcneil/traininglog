@@ -34,6 +34,10 @@ services:
     depends_on:
       sqlserver:
         condition: service_healthy
+    develop:
+      watch:
+        - path: ./traininglog-api
+          action: rebuild
 
   client:
     build:
@@ -46,6 +50,10 @@ services:
       - "8081:80"
     depends_on:
       - api
+    develop:
+      watch:
+        - path: ./traininglog-client
+          action: rebuild
 
 volumes:
   sqlserver_data:
