@@ -1,3 +1,10 @@
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.suo
+appsettings.Development.json
+
 # Logs
 logs
 *.log
