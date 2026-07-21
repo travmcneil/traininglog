@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using TrainingLog.Infrastructure.Data;
 using TrainingLog.Api.DTOs;
+using TrainingLog.Infrastructure.Data;
 
 namespace TrainingLog.Api.Controllers
 {
