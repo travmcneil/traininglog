@@ -1,5 +1,5 @@
 # ---- Build stage ----
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /src
 
 # Copy csproj files first and restore (leverages Docker layer caching —
@@ -19,7 +19,7 @@ FROM build AS publish
 RUN dotnet publish "TrainingLog.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # ---- Final runtime stage ----
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
 WORKDIR /app
 EXPOSE 8080
 
