@@ -1,30 +1,51 @@
-version: '3.8'
-
 services:
-  sql-server:
+  sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: traininglog-sqlserver
     environment:
       ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "YourSA@Password123"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD}"
+      MSSQL_PID: "Express"
     ports:
       - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
     healthcheck:
-      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourSA@Password123" -Q "SELECT 1" -No -C
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"${SA_PASSWORD}\" -C -Q 'SELECT 1' || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 20s
 
-  traininglog-api:
-    build: .
-    depends_on:
-      sql-server:
-        condition: service_healthy
+  api:
+    build:
+      context: ./TrainingLog
+      dockerfile: TrainingLog.Api/Dockerfile
+    container_name: traininglog-api
     ports:
       - "8080:8080"
     environment:
-      ConnectionStrings__DefaultConnection: "Server=sql-server;Database=TrainLogDb;User Id=sa;Password=YourSA@Password123;TrustServerCertificate=True;MultipleActiveResultSets=true"
-      Jwt__Key: "your-secret-key-at-least-32-characters-long-here"
-      Jwt__Issuer: "TrainLogApi"
-      Jwt__Audience: "TrainLogClient"
-      ASPNETCORE_URLS: "http://+:8080"
-      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=TrainingLogDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True"
+      Jwt__Key: "${JWT_KEY}"
+      Jwt__Issuer: "TrainingLogApi"
+      Jwt__Audience: "TrainingLogClient"
+      Jwt__ExpiryMinutes: "60"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  client:
+    build:
+      context: ./traininglog-client
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: "http://localhost:8080/api"
+    container_name: traininglog-client
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
+
+volumes:
+  sqlserver_data:

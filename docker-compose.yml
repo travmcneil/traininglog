@@ -19,8 +19,8 @@ services:
 
   api:
     build:
-      context: ./traininglog-api
-      dockerfile: Dockerfile
+      context: ./TrainingLog-api
+      dockerfile: TrainingLog.Api/Dockerfile
     container_name: traininglog-api
     ports:
       - "8080:8080"
@@ -36,12 +36,12 @@ services:
         condition: service_healthy
     develop:
       watch:
-        - path: ./traininglog-api
+        - path: ./TrainingLog-api
           action: rebuild
 
   client:
     build:
-      context: ./traininglog-client
+      context: ./TrainingLog-client
       dockerfile: Dockerfile
       args:
         VITE_API_BASE_URL: "http://localhost:8080/api"
@@ -52,7 +52,7 @@ services:
       - api
     develop:
       watch:
-        - path: ./traininglog-client
+        - path: ./TrainingLog-client
           action: rebuild
 
 volumes:
