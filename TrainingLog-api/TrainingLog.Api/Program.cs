@@ -88,11 +88,11 @@ using (var scope = app.Services.CreateScope())
     await RoleSeeder.SeedRolesAsync(scope.ServiceProvider);
 }
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 using (var scope = app.Services.CreateScope())
 {
