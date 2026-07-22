@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:8081")
+        policy.WithOrigins("http://localhost:5173", "http://localhost:8081", "https://https://traininglog-lovat.vercel.app/")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
