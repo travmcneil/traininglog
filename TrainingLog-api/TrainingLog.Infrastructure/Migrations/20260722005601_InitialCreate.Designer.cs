@@ -12,7 +12,7 @@ using TrainingLog.Infrastructure.Data;
 namespace TrainingLog.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260711213755_InitialCreate")]
+    [Migration("20260722005601_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
