@@ -16,8 +16,9 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
             "http://localhost:5173",
             "http://localhost:8081",
+            "https://traininglog-lovat.vercel.app",
             "https://traininglog-git-main-travmcme.vercel.app"
-)
+        )
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
