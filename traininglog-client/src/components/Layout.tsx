@@ -98,6 +98,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             <MenuItem disabled sx={{ opacity: '1 !important' }}>
               {email}
             </MenuItem>
+            <MenuItem component={RouterLink} to="/change-password" onClick={handleMenuClose}>
+              Change Password
+            </MenuItem>
             <MenuItem onClick={handleLogout}>Log Out</MenuItem>
           </Menu>
         </Toolbar>

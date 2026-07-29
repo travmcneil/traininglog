@@ -9,6 +9,7 @@ import TrainingPlansPage from "./pages/TrainingPlansPage";
 import ShoesPage from "./pages/ShoesPage";
 import WorkoutsPage from "./pages/WorkoutsPage";
 import RacesPage from "./pages/RacesPage";
+import ChangePasswordPage from './pages/ChangePasswordPage';
 
 function App() {
   return (
@@ -77,6 +78,16 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <ChangePasswordPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+/>
 
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

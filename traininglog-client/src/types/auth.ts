@@ -15,3 +15,8 @@ export interface AuthResponseDto {
   email: string;
   role: string;
 }
+
+export interface ChangePasswordDto {
+  currentPassword: string;
+  newPassword: string;
+}
