@@ -129,6 +129,12 @@ The app was deployed using a mix of free-tier services chosen specifically to av
 
 CORS was configured on the API to explicitly allow the deployed client's origin, and the client's API base URL was set via a build-time environment variable pointing at the deployed API.
 
+## Post-Launch Additions
+
+After the initial build and deployment, additional functionality was added to round out the account management experience:
+
+- **Change Password**: a self-service endpoint (`POST /api/auth/change-password`) allowing an authenticated user to update their own password. The endpoint identifies the user from their JWT claim rather than a route parameter, so it can only ever act on the caller's own account, and requires the current password to be supplied and verified before the change is allowed — consistent with how ASP.NET Core Identity's `ChangePasswordAsync` is designed to be used. A corresponding form was added to the client, accessible from the account menu in the navigation bar.
+
 ## Documentation
 
 A project README was written covering the tech stack, architecture, data model, setup instructions, and the key design decisions made throughout — intended to give an interviewer a clear, fast overview of both what was built and the reasoning behind it.
