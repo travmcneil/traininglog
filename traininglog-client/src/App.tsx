@@ -10,6 +10,7 @@ import ShoesPage from "./pages/ShoesPage";
 import WorkoutsPage from "./pages/WorkoutsPage";
 import RacesPage from "./pages/RacesPage";
 import ChangePasswordPage from './pages/ChangePasswordPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   return (
@@ -87,7 +88,17 @@ function App() {
             </Layout>
           </ProtectedRoute>
         }
-/>
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <ProfilePage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

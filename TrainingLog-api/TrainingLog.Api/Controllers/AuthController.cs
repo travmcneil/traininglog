@@ -102,6 +102,88 @@ namespace TrainingLog.Api.Controllers
             return NoContent();
         }
 
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId!);
+
+            if (user == null) return NotFound();
+
+            return Ok(new UserProfileDto
+            {
+                Email = user.Email!,
+                FirstName = user.FirstName,
+                LastName = user.LastName
+            });
+        }
+
+        [HttpPut("me")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile(UpdateProfileDto dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId!);
+
+            if (user == null) return NotFound();
+
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors.Select(e => e.Description));
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("change-email")]
+        [Authorize]
+        public async Task<IActionResult> ChangeEmail(ChangeEmailDto dto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId!);
+
+            if (user == null) return NotFound();
+
+            // Require the current password before allowing an email change —
+            // same principle as changing a password: prove you're really the account owner.
+            var passwordValid = await _userManager.CheckPasswordAsync(user, dto.CurrentPassword);
+            if (!passwordValid)
+            {
+                return BadRequest("Current password is incorrect.");
+            }
+
+            var existingUser = await _userManager.FindByEmailAsync(dto.NewEmail);
+            if (existingUser != null && existingUser.Id != user.Id)
+            {
+                return BadRequest("That email is already in use by another account.");
+            }
+
+            // UserName is kept in sync with Email throughout this app (login uses email),
+            // so both need to be updated together.
+            var setEmailResult = await _userManager.SetEmailAsync(user, dto.NewEmail);
+            if (!setEmailResult.Succeeded)
+            {
+                return BadRequest(setEmailResult.Errors.Select(e => e.Description));
+            }
+
+            var setUserNameResult = await _userManager.SetUserNameAsync(user, dto.NewEmail);
+            if (!setUserNameResult.Succeeded)
+            {
+                return BadRequest(setUserNameResult.Errors.Select(e => e.Description));
+            }
+
+            // Reissue a fresh token with the updated email claim, so the client can
+            // stay logged in without forcing a re-login after this change.
+            var token = await GenerateJwtToken(user);
+
+            return Ok(token);
+        }
+
         private async Task<AuthResponseDto> GenerateJwtToken(ApplicationUser user)
         {
             var roles = await _userManager.GetRolesAsync(user);

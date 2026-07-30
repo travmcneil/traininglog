@@ -75,7 +75,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             to="/dashboard"
             sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit', fontWeight: 600 }}
           >
-            TrainingLog
+            Training Log
           </Typography>
 
           {!isMobile &&
@@ -95,13 +95,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             </Avatar>
           </IconButton>
           <Menu anchorEl={anchorEl} open={!!anchorEl} onClose={handleMenuClose}>
-            <MenuItem disabled sx={{ opacity: '1 !important' }}>
-              {email}
+            <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>
+              Profile
             </MenuItem>
-            <MenuItem component={RouterLink} to="/change-password" onClick={handleMenuClose}>
-              Change Password
-            </MenuItem>
-            <MenuItem onClick={handleLogout}>Log Out</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
